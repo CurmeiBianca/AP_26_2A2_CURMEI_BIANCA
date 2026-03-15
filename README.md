@@ -14,7 +14,7 @@ Modelul include:
 
 Interfata comuna pentru toate entitatile din retea.
 
-** METODE:**
+* METODE:
 - getName() - numele profilului
 - getImportance() - importanta (numarul de relatii)
 - getRelationships() - relatiile profilului
@@ -24,12 +24,12 @@ Interfata comuna pentru toate entitatile din retea.
 
 Clasa de baza pentru toate tipurile de persoane.
 
-** PROPRIETATI:**
+* PROPRIETATI:
 - name - numele persoanei
 - birthdate - data nasterii
 - relationships - Map<Profile, String> cu relatiile persoanei
 
-** FUNCTIONALITATE:**
+* FUNCTIONALITATE:
 - addRelationship(Profile, String) - adauga o relatie
 - getImportance() - numarul de relatii
 - toString() - afiseaza numele, data nasterii si importanta
@@ -38,40 +38,47 @@ Clasa de baza pentru toate tipurile de persoane.
 
 Reprezinta un programator.
 
-** PROPRIETATE SPECIFICA:**
+* PROPRIETATE SPECIFICA:
 favoriteLanguage - limbajul preferat
 
 ### 4. Designer (extinde Person)
 
 Reprezinta un designer.
 
-** PROPRIETATE SPECIFICA:**
+* PROPRIETATE SPECIFICA:
 tool - instrumentul principal folosit (ex.: Figma)
 
 ### 5. Company (implementeaza Profile)
 
 Reprezinta o companie de retea.
 
-** PROPRIETATI:**
+* PROPRIETATI:
 - name - numele companiei
 - industry - domeniul de activitate
 - relationships - relatiile cu persoane sau alte companii
-** FUNCTIONALITATE:**
+
+* FUNCTIONALITATE:
 
 - addRelationship(Profile, String) - adauga o relatie
 - getImportance() - numarul de relatii
 - toString() - afiseaza numele, industria si importanta
 
-6) SocialNetwork
+### 6. SocialNetwork
+
 Clasa care gestioneaza intreaga retea sociala.
+
 * FUNCTIONALITATE:
-I. addProfile(Profile) - adauga un profil in retea
-II. printNetwork() - afiseaza profilele ordonate descrescator dupa importanta
-III. buildGraph() - construieste un graf neorientat al relatiilor dintre profile
+
+- addProfile(Profile) - adauga un profil in retea
+- printNetwork() - afiseaza profilele ordonate descrescator dupa importanta
+- buildGraph() - construieste un graf neorientat al relatiilor dintre profile
+
 Graful returnat este folosit ulterior in partea de Advanced pentru analiza conectivitatii.
 
-7) Exemplu de utilizare (din Main.java)
+### 7. Exemplu de utilizare (din Main.java)
+
 Programul creeaza persoane, companii si relatii, apoi afiseaza reteaua:
+
 SocialNetwork network = new SocialNetwork();
 network.addProfile(p1);
 network.addProfile(p2);
