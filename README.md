@@ -220,7 +220,7 @@ List<Intersection> intersections =
 
 ```
 
-       Aceasta demonstreaza:
+Aceasta demonstreaza:
 * folosirea IntStream
 * generarea obiectelor cu mapToObj
 * colectarea intr-o lista
