@@ -13,43 +13,54 @@ Modelul include:
 ### 1. Profile (interfata)
 
 Interfata comuna pentru toate entitatile din retea.
+
 ** METODE:**
-- 'getName()' - numele profilului
-- 'getImportance()' - importanta (numarul de relatii)
-- 'getRelationships()' - relatiile profilului
+- getName() - numele profilului
+- getImportance() - importanta (numarul de relatii)
+- getRelationships() - relatiile profilului
 	Aceasta interfata permite tratarea uniform a persoanelor si companiilor.
 
-2) Person (abstract)
-Clasa de baza pentru toate tipurile de persoane.
-* PROPRIETATI:
-I. name - numele persoanei
-II. birthdate - data nasterii
-III. relationships - Map<Profile, String> cu relatiile persoanei
-* FUNCTIONALITATE:
-I. addRelationship(Profile, String) - adauga o relatie
-II. getImportance() - numarul de relatii
-III. toString() - afiseaza numele, data nasterii si importanta
+### 2. Person (abstract)
 
-3) Programmer (extinde Person)
+Clasa de baza pentru toate tipurile de persoane.
+
+** PROPRIETATI:**
+- name - numele persoanei
+- birthdate - data nasterii
+- relationships - Map<Profile, String> cu relatiile persoanei
+
+** FUNCTIONALITATE:**
+- addRelationship(Profile, String) - adauga o relatie
+- getImportance() - numarul de relatii
+- toString() - afiseaza numele, data nasterii si importanta
+
+### 3. Programmer (extinde Person)
+
 Reprezinta un programator.
-* PROPRIETATE SPECIFICA:
+
+** PROPRIETATE SPECIFICA:**
 favoriteLanguage - limbajul preferat
 
-4) Designer (extinde Person)
+### 4. Designer (extinde Person)
+
 Reprezinta un designer.
-* PROPRIETATE SPECIFICA:
+
+** PROPRIETATE SPECIFICA:**
 tool - instrumentul principal folosit (ex.: Figma)
 
-5) Company (implementeaza Profile)
+### 5. Company (implementeaza Profile)
+
 Reprezinta o companie de retea.
-* PROPRIETATI:
-I. name - numele companiei
-II. industry - domeniul de activitate
-III. relationships - relatiile cu persoane sau alte companii
-* FUNCTIONALITATE:
-I. addRelationship(Profile, String) - adauga o relatie
-II. getImportance() - numarul de relatii
-III. toString() - afiseaza numele, industria si importanta
+
+** PROPRIETATI:**
+- name - numele companiei
+- industry - domeniul de activitate
+- relationships - relatiile cu persoane sau alte companii
+** FUNCTIONALITATE:**
+
+- addRelationship(Profile, String) - adauga o relatie
+- getImportance() - numarul de relatii
+- toString() - afiseaza numele, industria si importanta
 
 6) SocialNetwork
 Clasa care gestioneaza intreaga retea sociala.
