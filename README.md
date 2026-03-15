@@ -1,6 +1,6 @@
-~ LABORATORUL 3 - HOMEWORK ~
+## ~ LABORATORUL 3 - HOMEWORK ~
 
-* Prezentare generala 
+### Prezentare generala 
 Pachetul org.example.homework implementeaza modelul de baza al unei retele sociale formate din persoane si companii. Fiecare entitate este reprezentata ca un Profile, poate avea relatii cu alte profile si are o importanta calculata in functie de numarul acestor relatii.
    
 Modelul include:
@@ -9,7 +9,7 @@ Modelul include:
 * relatii intre profile
 * o retea sociala (SocialNetwork) care gestioneaza si afiseaza entitatile
 
-* Structura claselor
+### Structura claselor
 1) Profile (interfata)
 Interfata comuna pentru toate entitatile din retea.
 * METODE:
@@ -73,7 +73,7 @@ Rezultatul este o lista de profile ordonate dupa importanta.
 
 
 
-~ LABORATORUL 3 - ADVANCED ~
+## ~ LABORATORUL 3 - ADVANCED ~
 
 Pachetul org.example.advanced extinde modelul de retea sociala din Homework prin introducerea unor algoritmi avansati de analiza a grafurilor. Scopul este identificarea:
 * punctelor de articulatie (articulation points)
@@ -81,7 +81,7 @@ Pachetul org.example.advanced extinde modelul de retea sociala din Homework prin
 Aceste analize sunt esentiale pentru a intelege cat de robusta este reteaua si care sunt nodurile critice a caror eliminare ar fragmenta graful.
 Functionalitatea este implementata in clasa ConnectivityAnalyzer, folosind algoritmul clasic al lui Tarjan, bazat pe parcurgere DFS.
    
-* ConnectivityAnalyzer
+### ConnectivityAnalyzer
 Clasa primeste o instanta de SocialNetwork si construieste automat graful neorientat al relatiilor folosind metoda network.buildGraph().
 Graful rezultat este reprezentat ca: Map<Profile, List<Profile>> ; unde fiecare relatie este adaugata in ambele directii.
 
@@ -102,13 +102,13 @@ Daca oricare dintre conditii este indeplinita, nodul este marcat ca punct de art
 Metoda: public List<List<Profile>> findBiconnectedComponents()
 O componenta biconexa este o submultime de noduri care ramane conexa chiar daca eliminam orice nod din ea. Aceste componente reprezinta zone stabile ale retelei.
 
-* ALGORITMUL FOLOSESTE:
+### ALGORITMUL FOLOSESTE:
 I. aceleasi structuri discoveryTime, low, parent
 II. o stiva de muchii (edgeStack) pentru a extrage componentele
 * MECANISMUL:
 Cand algoritmul detecteaza o separare (low[v] >= discoveryTime[u]), extrage din stiva toate muchiile pana la (u, v) si formeaza o componenta biconexa.
        
-* Teste Junit
+### Teste Junit
 Fisierul SocialNetworkTest.java valideaza corectitudinea algoritmilor.
 1) Testarea punctelor de articulatie
 Testul confirma ca:
@@ -124,7 +124,7 @@ Aceste conditii sunt corecte pentru un graf neorientat cu multiple componente bi
 
 
 
-~ LABORATORUL 4 - COMPULSORY ~
+## ~ LABORATORUL 4 - COMPULSORY ~
 
 Aceasta sectiune implementeaza un model simplu al unui oras, in care:
 * intersectiile sunt noduri ale grafului,
