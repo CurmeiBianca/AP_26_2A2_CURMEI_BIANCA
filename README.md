@@ -79,21 +79,16 @@ Graful returnat este folosit ulterior in partea de Advanced pentru analiza conec
 
 Programul creeaza persoane, companii si relatii, apoi afiseaza reteaua:
 
-
+```java
 SocialNetwork network = new SocialNetwork();
-
 network.addProfile(p1);
-
 network.addProfile(p2);
-
 network.addProfile(d1);
-
 network.addProfile(c1);
-
 network.addProfile(c2);
 
-
 network.printNetwork();
+```
 
 Rezultatul este o lista de profile ordonate dupa importanta.
 
