@@ -1,7 +1,7 @@
 ~ LABORATORUL 3 - HOMEWORK ~
 
 * Prezentare generala 
-   Pachetul org.example.homework implementeaza modelul de baza al unei retele sociale formate din persoane si companii. Fiecare entitate este reprezentata ca un Profile, poate avea relatii cu alte profile si are o importanta calculata in functie de numarul acestor relatii.
+Pachetul org.example.homework implementeaza modelul de baza al unei retele sociale formate din persoane si companii. Fiecare entitate este reprezentata ca un Profile, poate avea relatii cu alte profile si are o importanta calculata in functie de numarul acestor relatii.
    
    Modelul include:
 * persoane (Person) si specializari (Programmer, Designer)
