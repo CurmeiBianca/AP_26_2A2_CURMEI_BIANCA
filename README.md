@@ -111,7 +111,10 @@ Graful rezultat este reprezentat ca: Map<Profile, List<Profile>> ; unde fiecare 
 
 ### 1. Identificarea Punctelor de Articulatie
 
-Metoda: public <List<Profile> findArticulationPoints()
+Metoda: 
+``` java 
+public <List<Profile> findArticulationPoints()
+```
 
 Un punct de articulatie este un nod a carui eliminare creste numarul de componente conexe ale grafului. Intr-o retea sociala, aceste noduri sunt entitati critice care conecteaza grupuri altfel separate.
 
@@ -131,7 +134,10 @@ Daca oricare dintre conditii este indeplinita, nodul este marcat ca punct de art
        
 ### 2. Determinarea Componentelor Biconexe
 
-Metoda: public List<List<Profile>> findBiconnectedComponents()
+Metoda: 
+```java
+public List<List<Profile>> findBiconnectedComponents()
+```
 
 O componenta biconexa este o submultime de noduri care ramane conexa chiar daca eliminam orice nod din ea. Aceste componente reprezinta zone stabile ale retelei.
 
