@@ -15,10 +15,18 @@ Modelul include:
 Interfata comuna pentru toate entitatile din retea.
 
 * METODE:
-- getName() - numele profilului
-- getImportance() - importanta (numarul de relatii)
-- getRelationships() - relatiile profilului
-	Aceasta interfata permite tratarea uniform a persoanelor si companiilor.
+``` java
+getName() // numele profilului
+```
+
+``` java
+getImportance() // importanta (numarul de relatii)
+```
+
+``` java
+getRelationships() // relatiile profilului
+```
+Aceasta interfata permite tratarea uniform a persoanelor si companiilor.
 
 ### 2. Person (abstract)
 
@@ -30,15 +38,24 @@ Clasa de baza pentru toate tipurile de persoane.
 - relationships - Map<Profile, String> cu relatiile persoanei
 
 * FUNCTIONALITATE:
-- addRelationship(Profile, String) - adauga o relatie
-- getImportance() - numarul de relatii
-- toString() - afiseaza numele, data nasterii si importanta
+``` java 
+addRelationship(Profile, String) // adauga o relatie
+```
+
+``` java 
+getImportance() // numarul de relatii
+```
+
+``` java 
+toString() // afiseaza numele, data nasterii si importanta
+```
 
 ### 3. Programmer (extinde Person)
 
 Reprezinta un programator.
 
 * PROPRIETATE SPECIFICA:
+
 favoriteLanguage - limbajul preferat
 
 ### 4. Designer (extinde Person)
@@ -46,6 +63,7 @@ favoriteLanguage - limbajul preferat
 Reprezinta un designer.
 
 * PROPRIETATE SPECIFICA:
+
 tool - instrumentul principal folosit (ex.: Figma)
 
 ### 5. Company (implementeaza Profile)
@@ -59,9 +77,17 @@ Reprezinta o companie de retea.
 
 * FUNCTIONALITATE:
 
-- addRelationship(Profile, String) - adauga o relatie
-- getImportance() - numarul de relatii
-- toString() - afiseaza numele, industria si importanta
+``` java 
+addRelationship(Profile, String) // adauga o relatie
+```
+
+``` java 
+getImportance() // numarul de relatii
+```
+
+``` java 
+toString() // afiseaza numele, industria si importanta
+```
 
 ### 6. SocialNetwork
 
@@ -69,9 +95,15 @@ Clasa care gestioneaza intreaga retea sociala.
 
 * FUNCTIONALITATE:
 
-- addProfile(Profile) - adauga un profil in retea
-- printNetwork() - afiseaza profilele ordonate descrescator dupa importanta
-- buildGraph() - construieste un graf neorientat al relatiilor dintre profile
+``` java 
+addProfile(Profile) // adauga un profil in retea
+```
+``` java 
+printNetwork() // afiseaza profilele ordonate descrescator dupa importanta
+```
+``` java 
+buildGraph() // construieste un graf neorientat al relatiilor dintre profile
+```
 
 Graful returnat este folosit ulterior in partea de Advanced pentru analiza conectivitatii.
 
