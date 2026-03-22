@@ -302,3 +302,107 @@ Output-ul afiseaza:
 * lista strazilor sortate
 * continutul setului
 * numarul final de intersectii din set
+
+
+
+# ~ LABORATORUL 5 - COMPULSORY ~
+
+Aceasta sectiune implementeaza un model orientat pe obiecte pentru gestionarea unui catalog de resurce (carti, articole, fisiere locale sau resurse online). Scopul este:
+* definirea unei structuri de date pentru resurse
+* crearea unui repository care gestioneaza aceste resurse
+* validarea si cautarea resurselor
+* deschiderea lor folosind clasa Desktop (browser sau fisier local)
+
+Modelul este impartit in pachete clare: model, repository, exceptions, app.
+
+### 1. Modelul obiectelor 
+
+* Resource
+
+Reprezinta o resursa de catalog.
+
+==> Caracteristici:
+
+- id - identificator unic 
+- title - titlul resursei
+- location - URL sau cale locala
+- year - anul publicarii
+- author - autorul resursei
+
+Clasa foloseste Lombok (@Data, @AllArgsConstructor, @NoArgsConstructor) pentru generarea automata a metodelor standard.
+
+* Exceptii personalizate
+
+## InvalidResourceException
+
+Aruncata atunci cand o resursa nu este valida (ex: ID lipsa sau gol)
+
+## ResourceNotFoundException
+
+Aruncata atunci cand:
+* resursa nu exista in catalog
+* fisierul local nu poate fi gasit
+* URL-ul nu este accesibil
+
+Aceste exceptii asigura un flux robust si clar al erorilor.
+
+* Catalog - Repository-ul de resurse
+
+Clasa Catalog gestioneaza toate operatiile asupra resurselor.
+
+## FUNCTIONALITATE:
+```java
+addResource(Resource)
+```
+
+* valideaza resursa
+* o adauga in mapa
+* arunca InvalidResourceException daca ID-ul este invalid
+
+```java
+getResource(String id)
+```
+
+* cauta resursa dupa ID
+*arunca ResourceNotFoundException daca nu exista
+
+```java
+openResource(String id)
+```
+
+* deschide resursa folosind Desktop
+* daca location incepe cu "http", deschide in browser
+* altfel, incearca sa deschida fisierul local
+
+Aceasta metoda demonstreaza utilizarea API-ului java.awt.Desktop.
+
+* Exemplu de utilizare (din Main.java)
+
+Programul:
+* creeza un catalog
+* adauga doua resurse
+* incearca sa deschida resursa cu ID-ul jvm25
+
+```java
+Catalog catalog = new Catalog();
+
+catalog.addResource(new Resource(
+	"knuth67",
+	"The Art of Computer Programming",
+	"d:/books/programming/tacp.ps",
+	"1967",
+	"Donald E. Knuth"
+));
+
+catalog.addResource(new Resource(
+	"jvm25",
+	"The Java Virtual Machine Specification",
+	"https://docs.oracle.com/javase/specs/jvsm/se25/html/index.html",
+	"2025",
+	"Tim Lindholm & others"
+));
+
+catalog.openResource("jvm25");
+```
+
+Rezultatul: se deschide pagina oficiala a specificatiei JVM in browser.
