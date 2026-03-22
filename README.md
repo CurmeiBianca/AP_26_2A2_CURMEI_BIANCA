@@ -315,9 +315,9 @@ Aceasta sectiune implementeaza un model orientat pe obiecte pentru gestionarea u
 
 Modelul este impartit in pachete clare: model, repository, exceptions, app.
 
-### 1. Modelul obiectelor 
+## 1. Modelul obiectelor 
 
-* Resource
+### Resource
 
 Reprezinta o resursa de catalog.
 
@@ -331,13 +331,13 @@ Reprezinta o resursa de catalog.
 
 Clasa foloseste Lombok (@Data, @AllArgsConstructor, @NoArgsConstructor) pentru generarea automata a metodelor standard.
 
-* Exceptii personalizate
+## 2. Exceptii personalizate
 
-## InvalidResourceException
+### InvalidResourceException
 
 Aruncata atunci cand o resursa nu este valida (ex: ID lipsa sau gol)
 
-## ResourceNotFoundException
+### ResourceNotFoundException
 
 Aruncata atunci cand:
 * resursa nu exista in catalog
@@ -346,11 +346,11 @@ Aruncata atunci cand:
 
 Aceste exceptii asigura un flux robust si clar al erorilor.
 
-* Catalog - Repository-ul de resurse
+## 3. Catalog - Repository-ul de resurse
 
 Clasa Catalog gestioneaza toate operatiile asupra resurselor.
 
-## FUNCTIONALITATE:
+==> FUNCTIONALITATE:
 ```java
 addResource(Resource)
 ```
@@ -364,7 +364,7 @@ getResource(String id)
 ```
 
 * cauta resursa dupa ID
-*arunca ResourceNotFoundException daca nu exista
+* arunca ResourceNotFoundException daca nu exista
 
 ```java
 openResource(String id)
@@ -376,7 +376,7 @@ openResource(String id)
 
 Aceasta metoda demonstreaza utilizarea API-ului java.awt.Desktop.
 
-* Exemplu de utilizare (din Main.java)
+## 4. Exemplu de utilizare (din Main.java)
 
 Programul:
 * creeza un catalog
