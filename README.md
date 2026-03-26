@@ -406,3 +406,128 @@ catalog.openResource("jvm25");
 ```
 
 Rezultatul: se deschide pagina oficiala a specificatiei JVM in browser.
+
+# ~ LABORATORUL 6 -COMPULSORY ~
+
+Aceasta sectiune implementeaza o aplicatie Java care interactioneaza cu o baza de date relationala folosind JDBC, pattern-ul DAO si un 
+singleton pentru gestionarea conexiunii. Scopul este:
+* crearea unei baze de date relationale pentru filme, genuri si actori 
+* definirea tabelelor printr-un script SQL
+* conectarea la baza de date folosind un Singleton
+* implementarea unui DAO pentru entitatea Genre
+* testarea functionalitatilor printr-o clasa Main
+
+Structura proiectului este organizata in pachete clare: db, dao, model, compulsory.
+
+## 1. Baza de date
+
+Fisierul schema.sql defineste tabelele necesare:
+
+### Tabelele principale:
+
+* movies: id, title, release_date, duration, score, genre_id
+* genres: id, name
+* actors: id, name
+
+### Tabele de legatura:
+
+* movie_actors - asociaza filme cu actori (relatie many-to-many)
+
+## 2. Conexiunea la baza de date - Singleton
+
+### DatabaseConnection
+
+Clasa DatabaseConnection gestioneaza conexiunea JDBC folosind pattern-ul Singleton.
+
+=> Caracteristici:
+
+- conexiune statica (private static Connection connection)
+- constructor privat (nu poate fi instantiat)
+- metoda init() stabileste conexiunea folosind DriverManager
+- @Getter (Lombok) expune conexiunea catre DAO-uri
+
+Exemplu de initializare:
+```java
+DatabaseConnection.init();
+```
+
+La rulare, daca totul este configurat corect:
+
+Connected to database!
+
+## 3. Modelul obiectelor
+
+### Genre
+
+Reprezinta entitatea corespunzatoare tabelei genres.
+
+=> Caracteristici:
+
+- id - identificator unic
+- name - numele genului
+
+Clasa foloseste Lombok:
+
+- @Data - genereaza getter/setter/toString
+- @NoArgsConstructor
+- @AllArgsConstructor
+
+## 4. DAO - Data Access Object
+
+### GenreDAO
+
+Clasa GenreDAO ofera operatii CRUD pentru tabela genres.
+
+=> FUNCTIONALITATE:
+``` java
+create(String name)
+```
+- insereaza un gen nou in baza de date
+- foloseste PreparedStatement pentru siguranta
+- afiseaza confirmarea inserarii
+
+```java
+findById(int id)
+```
+- cauta un gen dupa ID
+- returneaza un obiect Genre sau null
+
+```java
+FindByName(String name)
+```
+- cauta un gen dupa nume
+- returneaza un obiect Genre sau null
+
+DAO-ul foloseste conexiunea unica furnizata de DatabaseConnection.
+
+## 5. Exemplu de utilizare (din Main.java)
+
+Programul demonstreaza functionalitatea DAO-ului si conexiunea la baza de date.
+
+==> Programul:
+- initializeaza conexiunea
+- creeaza un obiect GenreDAO
+- insereaza un gen nou
+- il cauta dupa nume
+- il cauta dupa ID
+
+```java
+DatabaseConnection.init();
+
+GenreDAO genreDAO = new GenreDAO();
+
+genreDAO.create("Action");
+
+Genre genre1 = genreDAO.findByName("Action");
+System.out.println("Found by name: " + genre1);
+
+Genre genre2 = genreDAO.findById(1);
+System.out.println("Found by id: " + genre2);
+```
+
+==> Output posibil:
+
+Connected to database!
+Inserted genre: Action
+Found by name: Genre(id=1, name=Action)
+Found by id: Genre(id=1, name=Action)
