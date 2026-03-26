@@ -528,6 +528,9 @@ System.out.println("Found by id: " + genre2);
 ==> Output posibil:
 
 Connected to database!
+
 Inserted genre: Action
+
 Found by name: Genre(id=1, name=Action)
+
 Found by id: Genre(id=1, name=Action)
