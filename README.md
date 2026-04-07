@@ -600,7 +600,7 @@ double score;
 int genreId;
 ```
 
-Aceste clase sunt simple DAO-uri folosite pentru maparea datelor din ResultSet.
+Aceste clase reprezinta modelul orientat pe obiecte (entitatile din baza de date) si sunt folosite pentru maparea datelor din ResultSet.
 
 ## 3. DAO - Data Access Object
 
