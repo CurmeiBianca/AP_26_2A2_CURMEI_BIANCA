@@ -534,3 +534,170 @@ Inserted genre: Action
 Found by name: Genre(id=1, name=Action)
 
 Found by id: Genre(id=1, name=Action)
+
+# ~ LABORATORUL 6 -HOMEWORK ~
+
+Aceasta sectiune extinde partea de Compulsory si implementeaza urmatoarele cerinte:
+* utilizarea unui connection pool (HikariCP)
+* definirea unui model orientat pe obiecte
+* implementarea tuturor DAO-urilor necesare
+* generarea unui raport HTML folosind FreeMarker
+* citirea datelor dintr-un view SQL dedicat raportului
+
+Structura proiectului este organizata in pachete clare: config, dao, model, report, homework.
+
+## 1. Connection Pool - HikariCP
+
+In locul conexiunii Singleton din Compulsory, partea de Homework foloseste un pool de conexiuni pentru performanta si scalabilitate.
+
+### Clasa DataSourceProvider
+
+Aceasta clasa gestioneaza pool-ul HikariCP:
+* configureaza URL-ul JDBC, user, parola si driverul MySql
+* seteaza dimenziunea minima/maxima a pool-ului 
+* expune metode statice pentru:
+	- init() - initializeaza pool-ul
+	- getConnection() - ofera o conexiune din pool
+	- close() - inchide pool-ul la finalul executiei
+
+Exemplu de initializare:
+```java
+DataSourceProvider.init();
+```
+
+La finalul programului:
+```java
+DataSourceProvider.close();
+```
+
+
+## 2. Modelul orientat pe obiecte
+
+Modelele sunt implementate in pachetul model si folosesc Lombok 
+
+### Actor
+
+```java
+int id;
+String name;
+```
+
+### Genre
+
+```java
+int id;
+String name;
+```
+
+### Movie
+
+```java
+int id;
+String title;
+LocalDate releaseDate;
+int dduration;
+double score;
+int genreId;
+```
+
+Aceste clase sunt simple DAO-uri folosite pentru maparea datelor din ResultSet.
+
+## 3. DAO - Data Access Object
+
+Toate DAO-urile folosesc conexiuni din HikariCP si sunt implementate in pachetul dao
+
+### 3.1. GenreDAO
+
+Operatii:
+* create(String name)
+* findById(int id)
+* findByName(String name)
+
+### 3.2. ActorDAO
+
+Operatii:
+* create(String name)
+* findById(int id)
+* findByName(String name)
+
+### 3.3. MovieDAO
+
+Operatii:
+* create(Movie movie)
+* findById(int id)
+* findByName(String title)
+
+Include conversii corecte intre LocalDate si java.sql.Date.
+
+### 3.4. MovieActorDAO
+
+Gestioneaza relatia many-to-many dintre filme si actori
+
+Operatii:
+* addActorToMovie(int movieId, int actorId)
+* findActorsByMovie(int movieId) -> lista de ID-uri
+* findMoviesByActor(int actorID) -> lista de ID-uri
+
+## 4. View SQL pentru raport
+
+Raportul HTML nu citeste direct din tabele, ci dintr-un view numit movie_report, care combina:
+* filmele
+* genurile
+* actorii
+
+Exemplu de structura posibila:
+```sql
+CREATE VIEW movie_report AS
+SELECT
+	m.id AS movie_id,
+	m.title AS movie_title,
+	m.release_date,
+	m.duration,
+	m.score, 
+	g.name AS genre_name
+FROM movies m
+JOIN genres g ON m.genre_id = g.id;
+```
+
+## 5. Generarea raportului HTML - FreeMarker
+
+### Clasa RaportGenerator
+
+Responsabila pentru:
+* 1. Citirea datelor din view-ul movie_report
+* 2. Construirea unei liste de Map<String, Object> pentru template
+* 3. Incarcarea template-ului movies.ftl
+* 4. Generarea fisierului report.html
+
+Template-ul este incarcat din: src/main/resources/templates/movies.ftl
+
+### Template-ul movies.ftl
+
+Genereaza un tabel HTML cu:
+* ID
+* Titlu
+* Data lansarii
+* Durata
+* Scor
+* Gen
+
+## 6. Clasa principala - HomeworkMain
+
+Demonstreaza intreg fluxul aplicatiei:
+* 1. Initializeaza pool-ul HikariCP
+* 2. Creeaza DAO-urile
+* 3. Insereaza date de test (genuri, actori, filme)
+* 4. Creeaza un film si il leaga de actori
+* 5. Genereaza raportul HTML
+* 6. Inchide pool-ul
+
+Exemplu de rulare:
+
+HikariCP connection pool initialized!
+Inserted genre: Action
+Inserted actor: Leonardo DiCaprio
+Inserted movie: Inception
+Linked movie 1 with actor 1
+Linked movie 1 with actor 2
+Report generated successfully!
+Homework finished successfully!
