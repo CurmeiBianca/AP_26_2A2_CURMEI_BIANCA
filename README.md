@@ -553,7 +553,7 @@ In locul conexiunii Singleton din Compulsory, partea de Homework foloseste un po
 ### Clasa DataSourceProvider
 
 Aceasta clasa gestioneaza pool-ul HikariCP:
-* configureaza URL-ul JDBC, user, parola si driverul MySql
+* configureaza URL-ul JDBC, user, parola si driverul MySQL
 * seteaza dimenziunea minima/maxima a pool-ului 
 * expune metode statice pentru:
 	- init() - initializeaza pool-ul
@@ -595,7 +595,7 @@ String name;
 int id;
 String title;
 LocalDate releaseDate;
-int dduration;
+int duration;
 double score;
 int genreId;
 ```
@@ -636,7 +636,7 @@ Gestioneaza relatia many-to-many dintre filme si actori
 Operatii:
 * addActorToMovie(int movieId, int actorId)
 * findActorsByMovie(int movieId) -> lista de ID-uri
-* findMoviesByActor(int actorID) -> lista de ID-uri
+* findMoviesByActor(int actorId) -> lista de ID-uri
 
 ## 4. View SQL pentru raport
 
@@ -661,7 +661,7 @@ JOIN genres g ON m.genre_id = g.id;
 
 ## 5. Generarea raportului HTML - FreeMarker
 
-### Clasa RaportGenerator
+### Clasa ReportGenerator
 
 Responsabila pentru:
 * 1. Citirea datelor din view-ul movie_report
