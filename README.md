@@ -694,10 +694,17 @@ Demonstreaza intreg fluxul aplicatiei:
 Exemplu de rulare:
 
 HikariCP connection pool initialized!
+
 Inserted genre: Action
+
 Inserted actor: Leonardo DiCaprio
+
 Inserted movie: Inception
+
 Linked movie 1 with actor 1
+
 Linked movie 1 with actor 2
+
 Report generated successfully!
+
 Homework finished successfully!
