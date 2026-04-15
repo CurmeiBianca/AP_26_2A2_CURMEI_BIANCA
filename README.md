@@ -407,7 +407,7 @@ catalog.openResource("jvm25");
 
 Rezultatul: se deschide pagina oficiala a specificatiei JVM in browser.
 
-# ~ LABORATORUL 6 -COMPULSORY ~
+# ~ LABORATORUL 6 - COMPULSORY ~
 
 Aceasta sectiune implementeaza o aplicatie Java care interactioneaza cu o baza de date relationala folosind JDBC, pattern-ul DAO si un 
 singleton pentru gestionarea conexiunii. Scopul este:
@@ -535,7 +535,7 @@ Found by name: Genre(id=1, name=Action)
 
 Found by id: Genre(id=1, name=Action)
 
-# ~ LABORATORUL 6 -HOMEWORK ~
+# ~ LABORATORUL 6 - HOMEWORK ~
 
 Aceasta sectiune extinde partea de Compulsory si implementeaza urmatoarele cerinte:
 * utilizarea unui connection pool (HikariCP)
@@ -708,3 +708,187 @@ Linked movie 1 with actor 2
 Report generated successfully!
 
 Homework finished successfully!
+
+# ~ LABORATORUL 6 - ADVANCED ~
+
+Aceasta sectiune extinde partea de Homework si introduce functionalitati avansate:
+* migrarea bazei de date cu Flyway
+* importul datelor reale din fisiere CSV
+* algoritmul de partitionare a filmelor in grupuri neinrudite
+* salvarea grupurilor in tabele dedicate (movie_list, movie_list_movies)
+* optimizarea bazei de date cu indecsi
+* integrarea completa a DAO-urilor si a pool-ului HikariCP
+
+Structura proiectului este organizata in pachete clare: migration, importer, algorithm, dao, model, advanced.
+
+## 1. Migrarea bazei de date - Flyway
+
+Partea de Advanced introduce Flyway pentru a gestiona evolutia bazei de date intr-un mod controlat si reproductibil.
+
+### Clasa FlywayMigration
+
+Aceasta clasa:
+* incarca driverul MySQL
+* configureaza conexiunea catre baza de date
+* specifica locatia scripturilor SQL (db/migration)
+* ruleaza migrarile prin flyway.migrate()
+
+Exemplu de utilizare:
+```java
+FlywayMigration.migrate();
+```
+
+### Scripturile Flyway
+
+Scripturile sunt localizate in: src/main/resources/db/migration/
+
+### V1__init.sql
+
+Creeaza tabelele de baza:
+* genres
+* movies 
+* actors
+* movie_actors (relatie many-to-many)
+
+### V2__movie_list.sql
+
+Creeaza tabele necesare pentru partea de Advanced:
+* movie_list - listele de filme
+* movie_list_movies - relatia many-to-many dintre liste si filme
+
+### V3__indexes.sql
+
+Creeaza indecsi pentru optimizarea interogarilor:
+* pe movie_list(created_at)
+* pe movie_list_movies(list_id)
+* pe movie_list_movies(movie_id)
+
+## 2. Importul datelor reale din CSV - CsvImporter
+
+Partea Advanced foloseste un dataset real, localizat in: src/main/resources/dataset/
+
+Fisierele sunt:
+* genres.csv
+* movies.csv
+* actors.csv
+* movie_actors.csv
+
+### Clasa CsvImporter
+
+Responsabila pentru:
+* citirea fisierelor csv din resources
+* maparea liniilor in obiecte
+* inserarea datelor folosind DAO-urile existente
+
+Fluxul importului:
+* 1. importGenres()
+* 2. importMovies()
+* 3. importActors()
+* 4. importMovieActors()
+
+Importul este modular si foloseste exclusiv DAO-urile implementate in Homework.
+
+## 3. Algoritmul de partitionare - MoviePartitioner
+
+Scopul algoritmului este de a imparti filmele in grupuri neinrudite, unde doua filme sunt considerate inrudite daca impart cel putin un actor.
+
+### Modelare ca graf
+
+* nod = film
+* muchie = exista actor comun
+
+Graful este construit folosind:
+* movieActorDAO.findActorsByMovie(movieId)
+* movieActorDAO.findMoviesByActor(actorId)
+
+### Identificarea componentelor conexe
+
+Algoritmul foloseste DFS pentru a gasi componentele conexe:
+* fiecare componenta = un grup de filme inrudite
+* doua filme sunt in acelasi grup daca exista un lant de actori comuni intre ele
+
+Rezultatul final este:
+
+```java
+List<List<Movie>> partitions;
+```
+
+Aceste grupuri sunt ulterior salvate in baza de date.
+
+## 4. Gestionarea listelor de filme - MovieListDAO
+
+Partea Advanced introduce o noua entitate: MovieList, folosita pentru a salva grupurile generate de algoritm.
+
+### Clasa MovieListDAO
+
+Operatii:
+* create(String name) - creeaza o lista in tabela movie_list
+* addMovieToList(int listId, int movieId) - insereaza in movie_list_movies
+* findById(int id) - incarca o lista si filmele asociate
+* findMoviesInList(int listId) - returneaza toate filmele dintr-o lista
+* saveMovieList(String name, List<Movie> movies) - creeaza lista si insereaza toate filmele
+
+### Modelul MovieList
+
+```java
+int id;
+String name;
+LocalDateTime createdAt;
+List<Movie> movies;
+```
+
+Clasa foloseste Lombok pentru generarea automata a getterelor si a setterelor.
+
+## 5. Structura dataset-ului
+
+Fisierele CSV sunt localizate in: src/main/resources/dataset/
+
+Acestea contin:
+* lista genurilor
+* lista filmelor
+* lista actorilor
+* relatiile film-actor
+
+Importul este realizat automat prin CsvImporter.importAll().
+
+## 6. Clasa principala - AdvancedMain
+
+Demonstreaza intreg fluxul partii Advanced:
+* 1. Aplica migrarile Flyway
+* 2. Initializeaza pool-ul HikariCP
+* 3. Creeaza DAO-urile
+* 4. Importa datele din CSV
+* 5. Ruleaza algoritmul de partitionare
+* 6. Afiseaza grupurile in consola
+* 7. Salveaza grupurile in baza de date
+
+Exemplu de rulare:
+
+Migrarile Flyway au fost aplicate.
+
+HikariCP connection pool initialized!
+
+Genurile au fost importate.
+
+Filmele au fost importate.
+
+Actorii au fost importati.
+
+Relatiile film-actor au fost importate.
+
+Filmele au fost partitionate in liste neinrudite.
+
+
+=== Grup 1 ===
+
+ - Inception
+
+ - The Revenant
+
+
+=== Grup 2 ===
+
+ - Titanic
+
+
+Toate grupurile au fost salvate in tabela movie_list
