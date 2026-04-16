@@ -895,3 +895,175 @@ Toate grupurile au fost salvate in tabela movie_list
 
 # ~ LABORATORUL 7 - COMPULSORY ~
 
+Aceasta sectiune introduce aplicatia Spring Boot + PostgreSQL, care expune un API REST simplu pentru gestionarea filmelor.
+
+Scopul este de a crea infrastrucutura minima necesara pentru partea de Homework si Advanced.
+
+Functionalitatile implementate in Compulsory sunt:
+* configurarea proiectului Spring Boot
+* conectarea la baza de date PostgreSQL
+* definirea entitatii Movie
+* crearea tabelului movies
+* implementarea repository-ului JPA
+* expunerea endpoint-urilor REST (GET, POST, DELETE)
+* testarea API-urilor folosind IntelliJ HTTP Client
+
+Strucutura proiectului este organizata in pachete clare: controller, model, repository, compulsory.
+
+## 1. Configurarea proiectului Spring Boot
+
+Proiectul foloseste:
+* Spring Boot 3.x
+* Spring Web
+* Spring Data JPA
+* PostgreSQL Driver
+* Lombok
+
+Fisierul application.properties configureaza conexiunea la baza de date:
+
+```code
+server.port=8080
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/lab6
+spring.datasource.username=postgres
+spring.datasource.password=BIANCA
+
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+```
+
+Setarea ddl-nauto=none indica faptul ca tabelele sunt create manual, nu automat de Hibernate.
+
+## 2. Structura bazei de date
+
+Pentru partea Compulsory este necesar un singur tabel:
+
+### Tabela movies
+
+```sql
+CREATE TABLE movies (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    release_date DATE,
+    duration INTEGER,
+    score DOUBLE PRECISION
+);
+```
+
+Aceasta structura corespunde exact entitatii Movie din proiect.
+
+## 3. Entitatea Movie 
+
+Clasa Movie reprezinta un rand din tabela movies si este mapata prin JPA:
+
+```java
+@Entity
+@Table(name = "movies")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Movie {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
+
+    private Integer duration;
+
+    private Double score;
+}
+```
+
+## 4. Repository-ul JPA - MovieRepository
+
+Repository-ul extinde JpaRepository si ofera automat operatiile CRUD:
+
+```java
+public interface MovieRepository extends JpaRepository<Movie, Integer> {
+
+}
+```
+
+Nu este necesara nicio implementare manuala - Spring Data genereaza totul automat.
+
+## 5. Controller-ul REST - MovieController
+
+Controller-ul expune endpoint-urile necesare pentru gestionarea filmelor:
+
+### GET/movies
+
+Returneaza lista tuturor filmelor
+
+### GET/movies/{id}
+
+Returneaza un film dupa ID
+
+### PORT/movies
+
+Creeaza un film nou pe baza unui JSON trimis in request
+
+### DELETE/movies/{id}
+
+Sterge un film dupa ID
+
+Aceste endpoint-uri permit testarea completa a CRUD-ului de baza.
+
+## 6. Testarea API-ului - IntelliJ HTTP Client
+
+Pentru testare se foloseste un fisier .http:
+
+### POST - creare film
+
+```code
+POST http://localhost:8080/movies
+Content-Type: application/json
+
+{
+  "title": "Inception",
+  "releaseDate": "2010-07-16",
+  "duration": 148,
+  "score": 8.8
+}
+```
+
+Raspunsul confirma inserarea:
+
+```Json
+{
+  "id": 1,
+  "title": "Inception",
+  "releaseDate": "2010-07-16",
+  "duration": 148,
+  "score": 8.8
+}
+```
+
+### GET - listarea filmelor
+
+```Code
+GET http://localhost:8080/movies
+```
+
+Exemplu de rezultat:
+
+```Json
+[
+  {
+    "id": 1,
+    "title": "Inception",
+    "releaseDate": "2010-07-16",
+    "duration": 148,
+    "score": 8.8
+  }
+]
+```
