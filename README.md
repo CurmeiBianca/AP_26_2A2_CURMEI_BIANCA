@@ -892,3 +892,6 @@ Filmele au fost partitionate in liste neinrudite.
 
 
 Toate grupurile au fost salvate in tabela movie_list
+
+# ~ LABORATORUL 7 - COMPULSORY ~
+

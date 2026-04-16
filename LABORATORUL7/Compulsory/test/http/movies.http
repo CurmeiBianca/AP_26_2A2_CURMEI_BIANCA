@@ -1,0 +1,9 @@
+POST http://localhost:8080/movies
+Content-Type: application/json
+
+{
+  "title": "Inception",
+  "releaseDate": "2010-07-16",
+  "duration": 148,
+  "score": 8.8
+}
