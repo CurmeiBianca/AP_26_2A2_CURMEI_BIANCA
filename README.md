@@ -1089,10 +1089,149 @@ Structura proiectului este organizata in pachete clare: client, config, controll
 
 Controller-ul expune endpoint-urile necesare pentru operatiile cerute in Homework:
 
-### * PUT/homework/movies/{id}
+* PUT/homework/movies/{id}
 
 Actualizeaza complet un film existent.
 
 Body-ul trebuie sa contina toate campurile entitatii Movie
 
-### * 
+* PATCH/homework/movies/{id}/score
+
+Actualizeaza doar scorul unui film.
+
+Body-ul contine doar un numar (Double).
+
+* DELETE/homework/movies/{id}
+
+Sterge un film dupa ID.
+
+Controller-ul foloseste MovieService pentru logica de business si MovieNotFoundException pentru cazurile in care filmul nu exista.
+
+## 2. MovieService - logica aplicatiei
+
+Service-ul implementeaza operatiile cerute:
+
+* getMovieById(id)
+
+Returneaza filmul sau arunca MovieNotFoundException
+
+* updateMovie(id, updatedMovie)
+
+Actualizeaza complet titlul, data lansarii, durata si scorul
+
+* updateScore(id, newScore)
+
+Actualizeaza doar scorul filmului
+
+* deleteMovie(id)
+
+Sterge filmul daca exista, altfel arunca MovieNotFoundException.
+
+Service-ul foloseste MovieRepository din pachetul homework
+
+## 3. MovieRepository - acces la baza de date
+
+Repository-ul extinde JpaRepository:
+
+```java
+public interface MovieRepository extends JpaRepository<Movie, Integer> {}
+```
+
+Aceasta ofera automat toate operatiile CRUD necesare
+
+## 4. Gestionarea exceptiilor - GlobalExceptionHandler
+
+Pentru a returna raspunsuri clare si consistente, proiectul include un handler global:
+
+* MovieNotFoundException -> HTTP 404
+
+Mesaj: "Movie with ID X not found"
+
+* alte erori -> HTTP 500
+
+Mesaj generic pentru erori interne
+
+Acest mecanism asigura API robust si usor de consumat
+
+## 5. Configurare RestTemplate - suport pentru PATCH
+
+RestTemplate implicit NU suporta metoda PATCH.
+
+Pentru a o activa, proiectul foloseste:
+
+* Apache HttpClient 5
+* HttpComponentsClientHttpRequestFactory
+
+Astfel, RestTemplate poate trimite cereri PATCH fara erori
+
+Configuratia se afla in:
+
+```Code
+org.example.homework.config.RestTemplateConfig
+```
+
+## 6. Clientul REST - MovieClient
+
+MovieClient este wrapper peste RestTemplate si ofera metode pentru:
+
+* getMovie(id)
+* updateMovie(id, movie)
+* updateScore(id, score)
+* deleteMovie(id)
+
+Acesta consuma API-ul expus de MovieHomeworkController
+
+## 7. Demo automat - MovieClientDemo
+
+La pornirea aplicatiei, MovieClientDemo ruleaza automat si executa:
+
+* 1. GET pentru un film existent
+* 2. PUT pentru actualizarea completa
+* 3. PATCH pentru actualizare scor
+* 4. DELETE pentru un film
+* 5. Afisarea rezultatelor in consola:
+
+Exemplu de output:
+
+```Code
+=== HOMEWORK MOVIE CLIENT DEMO ===
+PUT result: Movie(...)
+PATCH result: Movie(...)
+DELETE completed for movie with ID = X
+=== END DEMO ===
+```
+
+Acest demo confirma functionalitatea completa a Homework-ului
+
+## 8. Testarea manuala - IntelliJ HTTP Client
+
+Fisierul movies.http permite testarea manuala a endpoint-urilor
+
+### PUT - actualizare completa
+
+```Http
+PUT http://localhost:8080/homework/movies/1
+Content-Type: application/json
+
+{
+  "title": "Updated Title",
+  "releaseDate": "2024-01-01",
+  "duration": 120,
+  "score": 9.5
+}
+```
+
+### PATCH - actualizare scor
+
+```Http
+PATCH http://localhost:8080/homework/movies/1/score
+Content-Type: application/json
+
+8.7
+```
+
+### DELETE - stergere film
+
+```Http
+DELETE http://localhost:8080/homework/movies/2
+```
