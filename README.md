@@ -1067,3 +1067,32 @@ Exemplu de rezultat:
   }
 ]
 ```
+
+# ~ LABORATORUL 7 - HOMEWORK ~
+
+Aceasta sectiune extinde partea Compulsory si adauga functionalitati suplimentare pentru gestionarea filmelor, incluzand actualizare completa (PUT), actualizare partiala (PATCH), stergere (DELETE) si un client REST care consuma API-ul expus de aplicatie.
+
+Scopul Homework-ului este de a implementa operatiile avansate asupra resursei Movie si de a demonstra utilizarea unui client REST (RestTemplate) configurat corect pentru metode HTTP avansate.
+
+Functionalitatile implementate in Homework sunt:
+* actualizarea completa a unui film (PUT)
+* actualizarea partiala a scorului unui film (PATCH)
+* stergerea unui film (DELETE)
+* tratarea exceptiilor printr-un handler global
+* implementarea unui client REST (MovieClient)
+* rularea unui demo automat (MovieClientDemo)
+* configurarea RestTemplate pentru suport PATCH (HttpClient5)
+
+Structura proiectului este organizata in pachete clare: client, config, controller, exception, repository, service, homework
+
+## 1. Controller-ul REST - MovieHomeworkController
+
+Controller-ul expune endpoint-urile necesare pentru operatiile cerute in Homework:
+
+### * PUT/homework/movies/{id}
+
+Actualizeaza complet un film existent.
+
+Body-ul trebuie sa contina toate campurile entitatii Movie
+
+### * 
