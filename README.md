@@ -897,7 +897,7 @@ Toate grupurile au fost salvate in tabela movie_list
 
 Aceasta sectiune introduce aplicatia Spring Boot + PostgreSQL, care expune un API REST simplu pentru gestionarea filmelor.
 
-Scopul este de a crea infrastrucutura minima necesara pentru partea de Homework si Advanced.
+Scopul este de a crea infrastructura minima necesara pentru partea de Homework si Advanced.
 
 Functionalitatile implementate in Compulsory sunt:
 * configurarea proiectului Spring Boot
@@ -908,7 +908,7 @@ Functionalitatile implementate in Compulsory sunt:
 * expunerea endpoint-urilor REST (GET, POST, DELETE)
 * testarea API-urilor folosind IntelliJ HTTP Client
 
-Strucutura proiectului este organizata in pachete clare: controller, model, repository, compulsory.
+Structura proiectului este organizata in pachete clare: controller, model, repository, compulsory.
 
 ## 1. Configurarea proiectului Spring Boot
 
@@ -1008,7 +1008,7 @@ Returneaza lista tuturor filmelor
 
 Returneaza un film dupa ID
 
-### PORT/movies
+### POST/movies
 
 Creeaza un film nou pe baza unui JSON trimis in request
 
@@ -1235,3 +1235,85 @@ Content-Type: application/json
 ```Http
 DELETE http://localhost:8080/homework/movies/2
 ```
+
+# ~ LABORATORUL 8 - COMPULSORY ~
+
+Aceasta sectiune implementeaza o aplicatie desktop cu interfata grafica pentru crearea si gestionarea unui labirint, folosind Swing + Java2D
+
+Scopul Compulsory-ului este de a construi o aplicatie GUI functionala cu componente grafice organizate clar, separare intre model si UI, si interactiune 
+cu utilizatorul prin butoane si spinners
+
+Functionalitatile implementate in Compulsory sunt:
+* crearea unui labirint ca grila de celule cu pereti pe toate laturile
+* desenarea labirintului pe un canvas grafic
+* eliminarea aleatorie a peretilor (butonul Create)
+* resetarea labirintului la starea initiala (butonul Reset)
+* inchiderea aplicatiei (butonul Exit)
+
+Structura proiectului este organizata in pachete clare: model, ui, compulsory
+
+## 1. Modelul - Cell
+
+Clasa Cell reprezinta o celula din labirint: 
+* stocheaza pozitia celulei (row, col)
+* stocheaza starea celor 4 pereti: topWall, rightWall, bottomWall, leftWall
+* peretii sunt prezenti (true) implicit la creare
+* ofera metoda resetWalls() pentru restaurarea tuturor peretilor
+
+Lombok este folosit pentru generarea automata a getterilor si setterilor prin adnotarile @Getter si @Setter
+
+## 2. Modelul - Maze
+
+Clasa Maze reprezinta labirintul ca o grila de celule (rows x cols):
+* initializeaza matricea de celule Cell[][]
+* ofera metoda reset() care restaureaza toti peretii tuturor celulelor
+* ofera metoda removeRandomWalls() care elimina aleatoriu pereti intre celule vecine, pastrand consistenta (daca peretele drept
+  al unei celule este eliminat, peretele stang al vecinului este eliminat si el)
+
+Lombok este folosit prin adnotarea @Getter pentru generarea automata a getterilor campurilor
+
+## 3. Interfata grafica - MainFrame
+
+MainFrame este JFrame-ul principal al aplicatiei si asambleaza cele 3 panouri folosind BorderLayout:
+* ConfigPanel  -> NORTH  (dimensiuni + buton Draw)
+* MazeCanvas   -> CENTER (desenul labirintului)
+* ControlPanel -> SOUTH  (butoanele Create, Reset, Exit)
+
+MainFrame detine referinta la modelul Maze si la MazeCanvas. Toata logica butoanelor este definita aici si trimisa panourilor prin Runnable (lambda), astfel 
+incat panourile nu cunosc modelul
+
+## 4. Interfata grafica - ConfigPanel
+
+ConfigPanel este plasat in partea NORTH a MainFrame si contine:
+* un JLabel si un JSpinner pentru numarul de randuri (2-30, default 5)
+* un JLabel si un JSpinner pentru numarul de coloane (2-30, default 5)
+* un buton Draw care declanseaza crearea si desenarea labirintului
+
+## 5. Interfata grafica - MazeCanvas
+
+MazeCanvas este un JPanel plasat in partea CENTER a MainFrame si reprezinta canvas-ul de desenare al labirintului:
+* suprascrie paintComponent() pentru a desena labirintul
+* fiecare celula este desenata ca un patrat colorat (CELL_SIZE = 40px)
+* peretii existenti sunt desenati ca linii in jurul patratului
+* foloseste Graphics2D cu antialiasing pentru linii clare
+* este plasat intr-un JScrollPane pentru suport scroll
+
+## 6. Interfata grafica - ControlPanel
+
+ControlPanel este plasat in partea SOUTH a MainFrame si contine cele 3 butoane de control:
+* Create - elimina aleatoriu pereti din labirint si redeseneaza canvas-ul
+* Reset  - restaureaza toti peretii labirintului si redeseneaza canvas-ul
+* Exit   - inchide aplicatia
+
+Fiecare buton primeste logica sa prin Runnable definit in MainFrame
+
+## 7. Punctul de intrare - MazeApp
+
+MazeApp contine metoda main() care porneste aplicatia:
+* foloseste SwingUtilities.invokeLater() pentru a lansa interfata grafica pe Event Dispatch Thread (EDT), asa cum recomanda Swing
+* instantiaza si afiseaza MainFrame
+
+## 8. Tehnologii folosite
+* Java 21
+* Swing + Java2D pentru interfata grafica
+* Lombok 1.18.30 pentru reducerea codului
