@@ -1317,3 +1317,134 @@ MazeApp contine metoda main() care porneste aplicatia:
 * Java 21
 * Swing + Java2D pentru interfata grafica
 * Lombok 1.18.30 pentru reducerea codului
+
+# ~ LABORATORUL 8 - HOMEWORK ~
+
+Aceasta sectiune extinde aplicatia Compulsory si adauga functionalitati avansate pentru editarea, validarea, salvarea si incarcarea labirintelor.
+
+Scopul Homework-ului este de a transforma aplicatia intr-un editor complet de labirint, cu suport pentru interactiune manuala, verificare algoritmica si persistenta.
+
+Functionalitatile implementate in Homework sunt:
+* editarea manuala a peretilor prin click pe canvas
+* validarea labirintului printr-un algoritm BFS (start -> end)
+* exportarea labirintului ca imagine PNG
+* salvarea labirintului prin serializare
+* incarcarea unui labirint salvat anterior
+* structura clara pe pachete: homework, homework.util, homework.serialization
+
+## 1. Interfata grafica - HomeworkFrame
+
+HomeworkFrame este fereastra principala a aplicatiei Homework si asambleaza cele trei panouri:
+* HomeworkConfigurationPanel -> NORTH
+* HomeworkDrawingPanel -> CENTER
+* HomeworkControlPanel -> SOUTH
+
+Foloseste BorderLayou, centreaza fereastra pe ecran si porneste aplicatia intr-o configuratie complet functionala.
+
+## 2. Panoul de configurare - HomeworkConfigurationPanel
+
+Acest panou permite utilizatorului sa introduca dimensiunea labirintului si sa genereze o grila noua
+
+Componente:
+* JLabel - textul "Maze size:"
+* JTextField - dimensiunea labirintului (default 10)
+* JButton - "Draw Maze"
+
+Functionalitate:
+* valideaza inputul (1-100)
+* afiseaza mesaje de eroare in caz de input valid
+* apeleaza drawingPanel.createGrid(size) pentru a genera labirintul
+
+## 3. Canvas-ul grafic - HomeworkDrawingPanel
+
+Aceasta este componenta centrala a aplicatiei Homework.
+
+Functionalitati principale:
+
+### Desenarea labirintului:
+* suprascrie paintComponent()
+* calculeaza dimensiunea fiecarei celule in functie de dimensiuea panoului
+* deseneaza peretii existenti (true) folosind Graphics2D cu antialising
+* labirintul este scalabil indiferent de dimensiunea ferestrei
+
+### Editarea manuala a peretilor
+
+La click pe canvas:
+* determina celula seectata
+* calculeaza distanta pana la fiecare perete
+* identifica peretele cel mai apropiat
+* inverseaza starea peretelui (true <-> false)
+* actualizeaza si peretele celulei vecine pentru consistenta
+* redeseneaza labirintul
+
+Aceasta implementeaza cerinta:
+
+"The suer must be able to manually edit the mazen by clicking a cell wall to toggle it on/off"
+
+### Export PNG
+
+Metoda exportImage();
+* creeaza un BufferdImage
+* deseneaza labirintul in imagine
+* este folosita de MazeExporter pentru salvarea PNG
+
+## 4. Panoul de control - HomeworkControlPanel
+
+Contine toate actiunile majore ale aplicatiei:
+* Create - elimina aleatoriu pereti (right/bottom) si mentine consistenta cu vecinii
+* Reset - recreeaza grila cu aceeasi dimensiune
+* Validate - verifica daca labirintul este traversabil
+* Save PNG - exporta imaginea labirintului
+* Save Maze - serializeaza structura peretilor
+* Load Maze - incarca un labirint salvat
+* Exit - inchide aplicatia
+
+Toate actiunile sunt implementate prin lambda-uri si interactioneaza direct cu HomeworkDrawingPanel
+
+## 5. Validarea labirintului - MazeValidator
+
+MazeValidator implementeaza un algoritm Breadth-First Search (BFS) pentru a determina daca exista un drum de la (0,0) la (n-1,n-1)
+
+Caracteristici:
+* foloseste o coada (Queue<Point>)
+* verifica peretii inainte de a avansa in directia respectiva
+* marcheaza celulele vizitate
+* returneaza true daca destinatia este atinsa
+
+Aceasta implementeaza cerinta: "Add a button to validate whether the maze is traversable"
+
+## 6. Export PNG - MazeExporter
+
+MazeExporter salveaza imaginea labirintului in format PNG folosind:
+* BufferedImage generat de drawingPanel.exportImage()
+* ImageIO.write()
+
+Este o clasa utilitara statica (@UtilityClass)
+
+## 7. Serializare - MazeSerializer & MazeLoader
+
+### MazeSerializer:
+* salveaza matricea boolean[][][] intr-un fisier 
+* foloseste ObjectOutputStream
+* este apelat de butonul Save Maze
+
+### MazeLoader:
+* incarca matricea de pereti dintr-un fisier
+* foloseste ObjectInputStream
+* este apelat de butonul Load Maze
+
+Aceste doua clase implementeaza cerinta: "Use object serialization in order to save and restore the current status of the maze"
+
+## 8. Punctul de intrare - HomeworkMain
+
+* porneste aplicatia pe Event Dispatch Thread (EDT)
+* afiseaza mesaj de log la pornire
+* creeaza instanta HomeworkFrame
+
+## 9. Tehnologii folosite
+
+* Java 21
+* Swing + Java2D
+* Lombok(@Getter, @Setter, @UtilityClass, @Slf2j)
+* Serializare Java
+* BufferedImage + ImageIO
