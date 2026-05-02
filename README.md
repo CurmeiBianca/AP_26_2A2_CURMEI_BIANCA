@@ -1339,7 +1339,7 @@ HomeworkFrame este fereastra principala a aplicatiei Homework si asambleaza cele
 * HomeworkDrawingPanel -> CENTER
 * HomeworkControlPanel -> SOUTH
 
-Foloseste BorderLayou, centreaza fereastra pe ecran si porneste aplicatia intr-o configuratie complet functionala.
+Foloseste BorderLayout, centreaza fereastra pe ecran si porneste aplicatia intr-o configuratie complet functionala.
 
 ## 2. Panoul de configurare - HomeworkConfigurationPanel
 
@@ -1352,7 +1352,7 @@ Componente:
 
 Functionalitate:
 * valideaza inputul (1-100)
-* afiseaza mesaje de eroare in caz de input valid
+* afiseaza mesaje de eroare in caz de input invalid
 * apeleaza drawingPanel.createGrid(size) pentru a genera labirintul
 
 ## 3. Canvas-ul grafic - HomeworkDrawingPanel
@@ -1363,14 +1363,14 @@ Functionalitati principale:
 
 ### Desenarea labirintului:
 * suprascrie paintComponent()
-* calculeaza dimensiunea fiecarei celule in functie de dimensiuea panoului
-* deseneaza peretii existenti (true) folosind Graphics2D cu antialising
+* calculeaza dimensiunea fiecarei celule in functie de dimensiunea panoului
+* deseneaza peretii existenti (true) folosind Graphics2D cu antialiasing
 * labirintul este scalabil indiferent de dimensiunea ferestrei
 
 ### Editarea manuala a peretilor
 
 La click pe canvas:
-* determina celula seectata
+* determina celula selectata
 * calculeaza distanta pana la fiecare perete
 * identifica peretele cel mai apropiat
 * inverseaza starea peretelui (true <-> false)
@@ -1379,12 +1379,12 @@ La click pe canvas:
 
 Aceasta implementeaza cerinta:
 
-"The suer must be able to manually edit the mazen by clicking a cell wall to toggle it on/off"
+"The user must be able to manually edit the maze by clicking a cell wall to toggle it on/off"
 
 ### Export PNG
 
 Metoda exportImage();
-* creeaza un BufferdImage
+* creeaza un BufferedImage
 * deseneaza labirintul in imagine
 * este folosita de MazeExporter pentru salvarea PNG
 
@@ -1445,6 +1445,6 @@ Aceste doua clase implementeaza cerinta: "Use object serialization in order to s
 
 * Java 21
 * Swing + Java2D
-* Lombok(@Getter, @Setter, @UtilityClass, @Slf2j)
+* Lombok(@Getter, @Setter, @UtilityClass, @Slf4j)
 * Serializare Java
 * BufferedImage + ImageIO
