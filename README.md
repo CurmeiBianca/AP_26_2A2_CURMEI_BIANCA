@@ -1448,3 +1448,105 @@ Aceste doua clase implementeaza cerinta: "Use object serialization in order to s
 * Lombok(@Getter, @Setter, @UtilityClass, @Slf4j)
 * Serializare Java
 * BufferedImage + ImageIO
+
+# ~ LABORATORUL 9 - COMPULSORY ~
+
+Aceasta sectiune introduce programarea concurenta in aplicatia de labirint
+
+Scopul Compulsory-ului este de a simula doua entitati (Robot si Bunny) care se deplaseaza simultan intr-un labirint, folosind thread-uri si memorie partajata
+
+Functionalitatile implementate in Compulsory sunt:
+* definirea unui labirint (Maze) cu celule si pereti
+* definirea a doua entitati concurente: Robot si Bunny 
+* implementarea unei memorii partajate thread-safe (SharedMemory)
+* verificarea miscarilor prin Maze.canMove()
+* rularea simultana a Robotului si Iepurelui in thread-uri separate
+* coordonarea executiei prin clasa Game
+* pornirea si oprirea controlata a thread-urilor
+
+## 1. Structura labirintului - Maze & Cell
+
+Labirintul este reprezentat printr-o matrice de celule (Cell[][]), fiecare celula avand 4 pereti:
+* topWall
+* bottomWall
+* leftWall
+* rightWall
+
+In Compulsory, pentru a permite miscarea entitatilor, peretii sunt deschisi la initializare
+
+Maze ofera functionalitati precum:
+* getCell(row, col)
+* verificarea limitelor (isInside)
+* verificarea miscarilor (canMove)
+* resetarea peretilor (reset)
+
+## 2. Entitatile concurente - Robot si Bunny
+
+Ambele clase implementeaza Runnable, ceea ce permite rularea lor in thread-uri separate
+
+### Robot
+
+* are o pozitie curenta
+* incearca sa se deplaseze in jos (row + 1)
+* scrie fiecare miscare in SharedMemory
+
+### Bunny
+
+* are o pozitie curenta
+* incearca sa se deplaseze in sus (row - 1)
+* scrie fiecare miscare in SharedMemory
+
+Miscarile sunt permise doar daca Maze.canMove() returneaza true
+
+## 3. Memoria partajata - SharedMemory
+
+SharedMemory este o componenta thread-safe folosita pentru comunicarea dintre Robot si Bunny
+
+Caracteristici:
+* metode sincronizate (synchronized)
+* stocheaza mesaje intr-o lista interna
+* afiseaza in consola fiecare miscare
+* permite citirea tuturor mesajelor (readAll)
+
+## 4. Coordonarea executiei - Game
+
+Clasa Game creeaza si gestioneaza toate componentele:
+* Maze
+* SharedMemory
+* Robot
+* Bunny
+* thread-urile lor
+
+Functionalitati:
+* start() -> porneste thread-urile
+* stop() -> opreste thread-urile si asteapta terminarea lor (join)
+* gestioneaza durata simularii
+
+## 5. Punctul de intrare - Lab9Main
+
+Lab9Main porneste jocul, il lasa sa ruleze cateva secunde si apoi il opreste
+
+Exemplu de output in consola:
+
+```Code
+Game started!
+[SharedMemory] Robot moved to Position(row=1, col=0)
+[SharedMemory] Bunny moved to Position(row=8, col=9)
+...
+Game stopped!
+```
+
+Acest comportament confirma ca:
+* thread‑urile rulează corect
+* entitățile se deplasează simultan
+* memoria partajată funcționează
+* labirintul permite mișcarea
+
+## 6. Tehnologii folosite
+
+* Java 21
+* Thread‑uri (Runnable, Thread)
+* Sincronizare (synchronized)
+* Lombok (@Getter, @Setter)
+* Programare concurentă
+* Structuri de date thread‑safe
