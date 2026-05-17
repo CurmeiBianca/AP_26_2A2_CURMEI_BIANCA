@@ -1696,3 +1696,99 @@ The WINNER is: Alex with score 8 and total time 4800 ms
 * Lombok (@Getter, @Setter)
 * I/O Streams
 * Structuri de date sincronizate (Collections.synchronizedList)
+
+# ~ LABORATORUL 11 - COMPULSORY ~
+
+Aceasta sectiune introduce Java Persistence API (JPA) in aplicatia existenta, cu scopul de a salva si incarca date dintr-o baza de date relationala.
+
+In Compulsory, accentul este pus pe:
+* definirea unei entitati JPA
+* configurarea unei unitati de persistenta
+* implementarea unui repository
+* testarea operatiilor CRUD de baza
+
+## 1. Scopul Compulsory-ului
+
+Obiectivul laboratorului este de a integra un mecanism de persistenta in aplicatie folosind:
+* JPA (Jakarta Persistence API)
+* Hibernate ca provider
+* H2 Database in memorie
+
+Astfel, datele despre jucatori pot fi salvate, incarcate si gestionate intr-o maniera standardizata.
+
+## 2. Entitatea JPA - Player
+
+Clasa Player a fost transformata intr-o entitate JPA prin adnotarile:
+* @Entity - marcheaza clasa ca entitate persistenta
+* @Table(name = "players") - defineste numele tabelului
+* @Id + @GeneratedValue - genereaza automat cheia primara
+
+Campurile persistente sunt:
+* id - cheia primara
+* name - numele jucatorului
+* score - scorul acumulat
+* totalTime - timpul total de raspuns
+
+Aceasta entitate este mapata automat de Hibernate intr-un tabel SQL.
+
+## 3. Repository-ul - PlayerRepository
+
+Pentru gestionarea operatiilor CRUD a fost implementat un repository manual, folosind:
+* EntityManagerFactory
+* EntityManager
+* tranzactii JPA (getTransaction().begin()/commit())
+
+Metode implementate:
+* save(Player player) - persista un jucator in baza de date
+* findById(Long id) - cauta un jucator dupa ID
+
+Acest repository demonstreaza utilizarea directa a API-ului JPA fara Spring Data.
+
+## 4. Configurarea JPA - persistence.xml
+
+Fisierul persistence.xml defineste unitatea de persistenta quizPU, care include:
+* provider JPA: HibernatePersistenceProvider
+* entitatea Player
+* baza de date H2 in memorie
+* configurari Hibernate:
+* - hibernate.hbm2ddl.auto = update
+* - hibernate.show_sql = true
+* - hibernate.format_sql = true
+
+Aceasta configuratie permite:
+* generarea automata a tabelelor
+* afisarea SQL-ului in consola
+* pastrarea datelor in memorie pe durata executiei
+
+## 5. Testarea persistentei - TestJPA
+
+Clasa TestJPA demonstreaza functionarea completa a sistemului:
+* 1. Creeaza un PlayerRepository
+* 2. Creeaza un obiect Player
+* 3. Seteaza scorul si timpul total
+* 4. Salveaza entitatea in baza de date
+* 5. O citeste inapoi folosind findById
+* 6. Afiseaza rezultatul in consola
+
+Exemplu de output:
+```Code
+Hibernate: insert into players (name, score, total_time) values (?, ?, ?)
+Hibernate: select p1_0.id, p1_0.name, p1_0.score, p1_0.total_time from players p1_0 where p1_0.id=?
+Found player: Bianca | score = 10 | time = 5000
+```
+
+Acest comportament confirma ca:
+* entitatea este mapata corect
+* repository-ul functioneaza
+* tranzactiile sunt gestionate corect
+* baza de date H2 este configurata corect
+
+## 6. Tehnologii folosite
+
+* Java 21
+* Jakarta Persistence API (JPA)
+* Hibernate ORM
+* H2 Database (in-memory)
+* Lombok (@Getter, @Setter, @NoArgsConstructor)
+* EntityManager & EntityManagerFactory
+* persistence.xml (JPA configuration)
