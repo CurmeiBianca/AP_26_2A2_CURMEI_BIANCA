@@ -1550,3 +1550,149 @@ Acest comportament confirma ca:
 * Lombok (@Getter, @Setter)
 * Programare concurentă
 * Structuri de date thread‑safe
+
+# ~ LABORATORUL 10 - HOMEWORK ~
+
+Aceasta sectiune extinde aplicatia prin introducerea unui sistem Client-Server pentru un joc de tip Quiz, in care mai multi jucatori se pot conecta simultan, pot raspunde la intrebari si pot concura intre ei pe baza scorului si a timpului total de raspuns.
+
+Scopul Homework-ului este de a implementa un server concurent care gestioneaza mai multi clienti, un model OOP pentru intrebari si jucatori, precum si o logica de joc care determina castigatorul.
+
+Functionalitatile implementate in Homework:
+* incarcarea intrebarilor dintr-un fisier extern (questions.txt)
+* definirea modelelor Question si Player
+* implementarea unui server concurent (GameServer) folosind ExecutorService
+* gestionarea fiecarui client printr-un thread dedicat (ClientThread)
+* masurarea timpului de raspuns pentru fiecare intrebare
+* calcularea scorului si a timpului total pentru fiecare jucator
+* determinarea castigatorului dupa doua criterii:
+* 1. scor descrescator
+* 2. timp total crescator (criteriu de departajare)
+* comunicarea bidirectionala intre client si server prin socket-uri
+
+## 1. Structura proiectului - Client, Server si Model
+
+Proiectul este impartit in trei pachete principale:
+
+### 1.1. Pachetul model
+
+Contine clasele care definesc entitatile jocului:
+
+### Question
+* textul intrebarii
+* raspunsul corect
+* metoda isCorrect() pentru verificarea raspunsului
+
+### Player
+* numele jucatorului
+* scorul acumulat
+* timpul total de raspuns
+* metode pentru incrementarea scorului si adaugarea timpului
+
+### 1.2. Pachetul server
+
+Contine logica principala a jocului si gestionarea conexiunilor:
+
+### Game
+* incarca intrebarile din resources/questions.txt
+* stocheaza lista jucatorilor
+* ofera acces la intrebari
+* determina castigatorul pe baza scorului si timpului
+
+### ClientThread
+* gestioneaza comunicarea cu un client individual
+* trimite intrebarile si primeste raspunsurile
+* masora timpul de raspuns
+* actualizeaza scorul si timpul total al jucatorului
+
+### GameServer
+* porneste serverul pe portul 5000
+* foloseste un ExecutorService cu un pool fix de 10 thread-uri
+* accepta conexiuni noi si porneste cate un ClientThread pentru fiecare client
+
+### 1.3. Pachetul client
+
+Contine aplicatia client:
+
+### GameClient
+* se conecteaza la server 
+* primeste intrebarile si mesajele
+* trimite raspunsurile utilizatorului
+* afiseaza scorul si timpul final
+
+## 2. Fisierul de resurse - questions.txt
+
+Intrebarile sunt stocate intr-un fisier text cu formatul:
+
+```Code
+Intrebare|Raspuns
+```
+
+Exemplu:
+
+```Code
+What is the capital of France?|Paris
+How many planets are in the Solar System?|8
+```
+
+Acest fisier este incarcat automat la pornirea serverului
+
+## 3. Fluxul de executie al jocului
+
+### 1. Serverul porneste si asteapta clienti 
+
+### 2. Un client se conecteaza si iti introduce numele
+
+### 3. Serverul trimite intrebarile una cate una
+
+### 4. Pentru fiecare intrebare:
+* clientul trimite raspunsul
+* serverul masoara timpul de raspuns
+* serverul verifica raspunsul si actualizeaza scorul
+
+### 5. La final, serverul:
+* afiseaza scorul si timpul total al jucatorului
+* determina castigatorul global
+* trimite rezultatul catre fiecare client
+
+## 4. Exemplu de rulare
+
+### Server
+
+```Code
+Server starting on port 5000...
+Server started. Waiting for clients...
+New client connected: /127.0.0.1
+Loaded 10 questions
+```
+
+### Client 
+
+```Code
+Connected to the server!
+Welcome to the Quiz Game!
+Please enter your name:
+Curmei
+Hello, Curmei! Waiting for the game to start...
+
+QUESTION 1: What is the capital of France?
+Your answer:
+Paris
+Correct!
+Time taken: 1200 ms
+----------------------------------------
+...
+Game over!
+Your final score is: 7
+Your total time is: 5230 ms
+The WINNER is: Alex with score 8 and total time 4800 ms
+```
+
+## 5. Tehnologii folosite
+
+* Java 21
+* Socket-uri (TCP)
+* Thread-uri si ExecutorService
+* Programare concurenta
+* Lombok (@Getter, @Setter)
+* I/O Streams
+* Structuri de date sincronizate (Collections.synchronizedList)
