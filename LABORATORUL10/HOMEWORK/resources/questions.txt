@@ -1,0 +1,10 @@
+What is the capital of France?|Paris
+How many planets are in the Solar System?|8
+What is the largest ocean on Earth?|Pacific
+What is the chemical symbol for water?|H2O
+Who painted the Mona Lisa?|Da Vinci
+What is the square root of 64?|8
+What is the capital of Italy?|Rome
+How many days are in a leap year?|366
+What gas do plants absorb from the atmosphere?|CO2
+Who discovered gravity?|Newton
